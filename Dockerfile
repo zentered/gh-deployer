@@ -2,7 +2,17 @@
 
 FROM node:20-slim
 ENV NODE_ENV production
-WORKDIR /usr/src/app
+WORKDIR /usr/src
+
+ARG GH_APP_ID
+ARG GH_APP_PRIVATE_KEY
+ARG GH_APP_INSTALLATION_ID
+ARG GH_OWNER
+
+ENV GH_APP_ID=$GH_APP_ID
+ENV GH_APP_PRIVATE_KEY=$GH_APP_PRIVATE_KEY
+ENV GH_APP_INSTALLATION_ID=$GH_APP_INSTALLATION_ID
+ENV GH_OWNER=$GH_OWNER
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -20,4 +30,4 @@ USER node
 COPY . .
 
 # Run the application.
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["node", "src/index.js"]

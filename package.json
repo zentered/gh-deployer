@@ -1,17 +1,31 @@
 {
   "name": "gh-deploy-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Docker container that can be used to interact with the GitHub Deployments API",
+  "keywords": [
+    "github",
+    "google-cloud-platform",
+    "deployments"
+  ],
+  "bugs": {
+    "url": "https://github.com/zentered/gh-deployer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zentered/gh-deployer.git"
+  },
+  "license": "MIT",
+  "author": "Zentered <hi@zentered.co> (https://zentered.co)",
+  "contributors": [
+    "Patrick Heneise (https://github.com/PatrickHeneise)"
+  ],
   "type": "module",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
     "dev": "node -r dotenv/config src/index.js",
+    "start": "node src/index.js",
     "test": "node --test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@octokit/auth-app": "^4.0.11",
     "@octokit/rest": "^19.0.8",
