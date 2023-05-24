@@ -5,27 +5,8 @@ export default async function createDeploymentStatus({
   deploymentId,
   environment,
   environmentUrl,
-  state,
-  ref
+  state
 }) {
-  if (!deploymentId) {
-    const res = await octokit.rest.repos.listDeployments({
-      owner,
-      repo,
-      ref,
-      environment
-    })
-    if (res.status !== 200) {
-      throw new Error(`GitHub API returned status ${res.status}`)
-    } else if (res.data.length === 0) {
-      throw new Error(`No deployments found for ${ref} in ${environment}`)
-    } else if (res.data.length > 1) {
-      throw new Error(
-        `Found more than one deployment for ${ref} in ${environment}`
-      )
-    }
-    deploymentId = res.data[0].id
-  }
   const statusObj = {
     owner,
     repo,

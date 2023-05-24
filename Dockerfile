@@ -3,6 +3,7 @@
 FROM node:20-slim
 ENV NODE_ENV production
 WORKDIR /usr/src
+VOLUME "/workspace"
 
 ARG GH_APP_ID
 ARG GH_APP_PRIVATE_KEY
@@ -23,11 +24,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
-# Run the application as a non-root user.
-USER node
-
 # Copy the rest of the source files into the image.
 COPY . .
 
 # Run the application.
-ENTRYPOINT ["node", "src/index.js"]
+ENTRYPOINT [ "/usr/local/bin/node" , "/usr/src/src/index.js" ]
