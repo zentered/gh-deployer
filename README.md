@@ -3,6 +3,9 @@
 GitHub Deployer is a Docker image that can be used to interact with the
 [GitHub Deployments API](https://docs.github.com/en/rest/deployments/deployments?apiVersion=2022-11-28#create-a-deployment).
 
+**Background and full article**:
+https://zentered.co/articles/preview-builds-with-cloud-run/
+
 ## Usage
 
 This code is meant to be used in a CI/CD pipeline to interact with the GitHub
@@ -17,13 +20,8 @@ your own GitHub App in the Developer Settings of your GitHub account.
 The following permissions are needed:
 
 - `deployments`
-
-The following permissions are recommended (for future features):
-
 - `pull_requests`
 - `contents`
-- `metadata`
-- `issues`
 
 Create & download the private key and run:
 

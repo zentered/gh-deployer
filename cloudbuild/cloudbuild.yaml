@@ -1,0 +1,52 @@
+steps:
+  - name: 'us-central1-docker.pkg.dev/[project]/docker/gh-deployer:latest'
+    env:
+      - REPO_NAME=$REPO_NAME
+      - TRANSIENT_ENVIRONMENT=true
+      - DESCRIPTION=Deploying to Google Cloud Run
+      - ENVIRONMENT=preview
+      - REF=$REF_NAME
+    args:
+      - create
+  - name: 'us-central1-docker.pkg.dev/[project]/docker/gh-deployer:latest'
+    env:
+      - REPO_NAME=$REPO_NAME
+      - ENVIRONMENT=preview
+      - REF=$REF_NAME
+    args:
+      - pending
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - '--destination=us-central1-docker.pkg.dev/[project]/docker/[name]:$SHORT_SHA'
+      - '--use-new-run'
+  - name: 'us-central1-docker.pkg.dev/[project]/docker/gh-deployer:latest'
+    env:
+      - REPO_NAME=$REPO_NAME
+      - ENVIRONMENT=preview
+      - REF=$REF_NAME
+    args:
+      - in_progress
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    args:
+      - run
+      - deploy
+      - preview-$_PR_NUMBER
+      - '--image=us-central1-docker.pkg.dev/[project]/docker/[name]:$SHORT_SHA'
+      - '--region=us-central1'
+      - '--memory=512Mi'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+    entrypoint: gcloud
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    env:
+      - PR_NUMBER=$_PR_NUMBER
+    script: >-
+      gcloud run services list --project [project] --filter preview-$PR_NUMBER
+      --format "value(status.address.url)" > /workspace/deployer_environment_url
+  - name: 'us-central1-docker.pkg.dev/[project]/docker/gh-deployer:latest'
+    env:
+      - REPO_NAME=$REPO_NAME
+      - ENVIRONMENT=preview
+      - REF=$REF_NAME
+    args:
+      - success
